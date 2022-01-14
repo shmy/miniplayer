@@ -47,6 +47,8 @@ class Miniplayer extends StatefulWidget {
   ///If onDismissed is set, the miniplayer can be dismissed
   final Function? onDismissed;
 
+  final VoidCallback? onTap;
+
   //Allows you to manually control the miniplayer in code
   final MiniplayerController? controller;
 
@@ -62,6 +64,7 @@ class Miniplayer extends StatefulWidget {
     this.duration = const Duration(milliseconds: 300),
     this.onDismiss,
     this.onDismissed,
+    this.onTap,
     this.controller,
   }) : super(key: key);
 
@@ -175,7 +178,7 @@ class _MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
             children: [
               if (_percentage > 0)
                 GestureDetector(
-                  onTap: () => _animateToHeight(widget.minHeight),
+                  onTap: widget.onTap ?? () => _animateToHeight(widget.minHeight),
                   child: Opacity(
                     opacity: borderDouble(
                         minRange: 0.0, maxRange: 1.0, value: _percentage),
@@ -218,7 +221,7 @@ class _MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    onTap: () => _snapToPosition(_dragHeight != widget.maxHeight
+                    onTap: widget.onTap ?? () => _snapToPosition(_dragHeight != widget.maxHeight
                         ? PanelState.MAX
                         : PanelState.MIN),
                     onPanStart: (details) {
